@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bt3</title>
+</head>
+
+<body>
+    <script>
+        class Mobile {
+            constructor(batteryLevel) {
+                this.batteryLevel = batteryLevel;
+                this.messageDraft = "";
+                this.inbox = [];
+                this.outbox = [];
+                this.status = "off";
+            }
+
+
+            checkStatus() {
+                return this.status;
+            }
+
+
+            turnOn() {
+                if (this.status === "off") {
+                    this.status = "on";
+                    this.batteryLevel--;
+                    console.log("Điện thoại đang bật.");
+                } else {
+                    console.log("Điện thoại đã được bật.");
+                }
+            }
+
+
+            turnOff() {
+                if (this.status === "on") {
+                    this.status = "off";
+                    this.batteryLevel--;
+                    console.log("Điện thoại đang tắt.");
+                } else {
+                    console.log("Điện thoại đã được tắt.");
+                }
+            }
+            
+
+            charge() {
+                if (this.batteryLevel < 100) {
+                    this.batteryLevel++;
+                    console.log("Điện thoại đang sạc. Mức pin: " + this.batteryLevel + "%");
+                } else {
+                    console.log("Điện thoại đã sạc đầy.");
+                }
+            }
+
+
+            compose(message) {
+                if (this.status === "on") {
+                    this.messageDraft = message;
+                    this.batteryLevel--;
+                    console.log("Đang soạn tin nhắn: " + this.messageDraft);
+                } else {
+                    console.log("Điện thoại đang tắt nên không thể soạn tin nhắn.");
+                }
+            }
+
+
+            receive(message) {
+                if (this.status === "on") {
+                    this.inbox.push(message);
+                    this.batteryLevel--;
+                    console.log("Tin nhắn đã nhận: " + message);
+                } else {
+                    console.log("Điện thoại đã tắt nên không thể nhận tin nhắn.");
+                }
+            }
+
+
+            send(phone) {
+                if (this.status === "on") {
+                    if (this.messageDraft !== "") {
+                        phone.receive(this.messageDraft);
+                        this.outbox.push(this.messageDraft);
+                        this.messageDraft = "";
+                        this.batteryLevel--;
+                        console.log("Gửi tin nhắn.");
+                    } else {
+                        console.log("Không có tin nhắn đã gửi.");
+                    }
+                } else {
+                    console.log("Điện thoại đang tắt nên không gửi tin nhắn.");
+                }
+            }
+
+
+            viewInbox() {
+                if (this.status === "on") {
+                    this.batteryLevel--;
+                    console.log("Hộp thư đến:");
+                    for (let i = 0; i < this.inbox.length; i++) {
+                        console.log(this.inbox[i]);
+                    }
+                } else {
+                    console.log("Điện thoại đang tắt nên không thể xem hộp thư đến.");
+                }
+            }
+
+
+            viewOutbox() {
+                if (this.status === "on") {
+                    this.batteryLevel--;
+                    console.log("Hộp thư đi:");
+                    for (let i = 0; i < this.outbox.length; i++) {
+                        console.log(this.outbox[i]);
+                    }
+                } else {
+                    console.log("Điện thoại đang tắt nên không thể xem hộp thư đi.");
+                }
+            }
+        }
+
+
+        let huawei = new Mobile(50);
+        let iphone = new Mobile(80);
+
+
+        
+
+
+        huawei.turnOn();
+        iphone.turnOn();
+        huawei.charge();
+        iphone.charge();
+
+
+        huawei.compose("Chào cậu mình là yuH đây!");
+        huawei.send(iphone);
+        iphone.compose("ô yuH cậu khỏe chứ");
+        iphone.send(huawei);
+
+
+        iphone.viewInbox();
+        huawei.viewInbox();
+
+
+        huawei.viewOutbox();
+        iphone.viewOutbox();
+
+
+    </script>
+</body>
+
+</html>
